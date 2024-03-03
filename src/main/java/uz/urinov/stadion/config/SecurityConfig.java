@@ -39,7 +39,7 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                 ).permitAll()
                 .requestMatchers("/api/v1/orders/**").hasAnyAuthority(RoleEnum.ADMIN.name(), RoleEnum.USER.name(), RoleEnum.STADIUM_OWNER.name())
-                .requestMatchers("/api/v1/stadiums/*").hasAnyAuthority(RoleEnum.ADMIN.name(), RoleEnum.USER.name(), RoleEnum.STADIUM_OWNER.name())
+                .requestMatchers(HttpMethod.GET,"/api/v1/stadiums/**").hasAnyAuthority(RoleEnum.ADMIN.name(), RoleEnum.USER.name(), RoleEnum.STADIUM_OWNER.name())
                 .requestMatchers("/api/v1/stadiums/**").hasAnyAuthority(RoleEnum.ADMIN.name(), RoleEnum.STADIUM_OWNER.name())
                 .anyRequest().authenticated();
         http.sessionManagement(httpSecuritySessionManagementConfigurer -> {
