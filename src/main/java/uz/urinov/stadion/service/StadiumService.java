@@ -1,5 +1,6 @@
 package uz.urinov.stadion.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -93,7 +94,7 @@ public class StadiumService {
         }
 
 
-     return stadiumRepository.save(stadiumEntity);
+        return stadiumRepository.save(stadiumEntity);
     }
 
 
@@ -116,10 +117,13 @@ public class StadiumService {
         return new ApiResponse("Success", true);
     }
 
+    @Transactional
     public ApiResponse deleteById(Long id) {
+
         UserEntity currentUser = CurrentUserProvider.getCurrentUser();
-        boolean byIdAndOwnerId = stadiumRepository.deleteByIdAndOwnerId(id, currentUser.getId());
-        if (byIdAndOwnerId) {
+
+        int byIdAndOwnerId = stadiumRepository.deleteByIdAndOwnerId(id, currentUser.getId());
+        if (byIdAndOwnerId>0) {
             return new ApiResponse("Successfully deleted", true);
         }
         return new ApiResponse("Error", false);

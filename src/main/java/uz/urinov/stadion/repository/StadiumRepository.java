@@ -36,8 +36,6 @@ public interface StadiumRepository extends JpaRepository<StadiumEntity, Long> {
     );
 
 
-     boolean deleteByIdAndOwnerId(Long stadiumId, Long ownerId);
-
-
+     int deleteByIdAndOwnerId(Long stadiumId, Long ownerId);
 
 }

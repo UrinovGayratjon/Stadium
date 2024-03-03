@@ -23,6 +23,6 @@ public class StadiumEntity extends AbstractEntity {
     @OneToMany()
     private List<AttachmentEntity> attachmentEntities;
 
-    @OneToMany(mappedBy = "stadiumEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "stadiumEntity", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<OrderEntity> orderEntityList;
 }

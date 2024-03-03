@@ -49,9 +49,7 @@ public class OrderStadiumService {
         orderEntity.setEndTime(endTime);
         orderEntity.setStadiumEntity(byId);
         orderEntity.setOrderOwner(principal);
-
         orderRepository.save(orderEntity);
-
         return new ApiResponse("Success", true);
     }
 
@@ -71,7 +69,6 @@ public class OrderStadiumService {
         UserEntity userEntity = CurrentUserProvider.getCurrentUser();
         List<OrderEntity> byOrderOwnerId = orderRepository.findByOrderOwnerId(userEntity.getId());
         List<OrderResponseDTO> list = byOrderOwnerId.stream().map(orderResponseDTOMapper::mapFrom).toList();
-
         return list;
     }
 }
