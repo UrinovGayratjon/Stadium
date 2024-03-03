@@ -40,12 +40,17 @@ public class StadiumController {
     public ResponseEntity<?> saveStadium(@RequestBody StadiumDTO requestDTO) {
         stadiumService.saveStadium(requestDTO);
         return ResponseEntity.ok(true);
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStadium(@PathVariable Long id, @RequestBody StadiumDTO requestDTO) {
         ApiResponse apiResponse = stadiumService.updateStadium(id, requestDTO);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        ApiResponse apiResponse = stadiumService.deleteById(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
     }
 
