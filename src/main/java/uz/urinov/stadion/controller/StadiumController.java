@@ -1,5 +1,6 @@
 package uz.urinov.stadion.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/stadiums")
+@SecurityRequirement(name = "bearerAuth")
 public class StadiumController {
     private final StadiumService stadiumService;
 
@@ -38,14 +40,18 @@ public class StadiumController {
 
     @PostMapping()
     public ResponseEntity<?> saveStadium(@RequestBody StadiumDTO requestDTO) {
-        stadiumService.saveStadium(requestDTO);
-        return ResponseEntity.ok(true);
-
+        return ResponseEntity.ok(stadiumService.saveStadium(requestDTO));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStadium(@PathVariable Long id, @RequestBody StadiumDTO requestDTO) {
         ApiResponse apiResponse = stadiumService.updateStadium(id, requestDTO);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        ApiResponse apiResponse = stadiumService.deleteById(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
     }
 

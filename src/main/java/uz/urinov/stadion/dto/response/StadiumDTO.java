@@ -3,6 +3,7 @@ package uz.urinov.stadion.dto.response;
 import lombok.Data;
 import uz.urinov.stadion.dto.CoordinateDTO;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -13,5 +14,5 @@ public class StadiumDTO {
     private String address;
     private Long hourlyPrice;
     private CoordinateDTO coordinateDTO;
-    private List<Long> imageList;
+    private List<Long> imageList = Collections.emptyList();
 }

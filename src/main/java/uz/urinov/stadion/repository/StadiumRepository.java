@@ -25,14 +25,19 @@ public interface StadiumRepository extends JpaRepository<StadiumEntity, Long> {
             @Param("lat") Double lat,
             @Param("lon") Double lon
     );
- @Query("SELECT s From StadiumEntity s inner join s.orderEntityList o where (o.date!=:date or (:end<=o.startTime and :start>=o.endTime)) order by (((s.lat - :lat) * (s.lat - :lat)) + ((s.lon - :lon) * (s.lon - :lon)))")
+
+    @Query("SELECT s From StadiumEntity s inner join s.orderEntityList o where (o.date!=:date or (:end<=o.startTime and :start>=o.endTime)) order by (((s.lat - :lat) * (s.lat - :lat)) + ((s.lon - :lon) * (s.lon - :lon)))")
     List<StadiumEntity> getAllBySortingByFreeTime2(
             @Param("date") LocalDate date,
-            @Param("start")LocalTime start,
-            @Param("end")LocalTime end,
+            @Param("start") LocalTime start,
+            @Param("end") LocalTime end,
             @Param("lat") Double lat,
             @Param("lon") Double lon
     );
+
+
+     boolean deleteByIdAndOwnerId(Long stadiumId, Long ownerId);
+
 
 
 }
