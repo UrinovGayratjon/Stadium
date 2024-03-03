@@ -1,5 +1,6 @@
 package uz.urinov.stadion.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import uz.urinov.stadion.service.OrderStadiumService;
 @RestController
 @RequestMapping("/api/v1/orders")
 @AllArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class OrderStadiumController {
     private final OrderStadiumService orderStadiumService;
 

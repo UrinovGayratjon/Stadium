@@ -13,6 +13,7 @@ import uz.urinov.stadion.dto.response.StadiumDTO;
 import uz.urinov.stadion.entity.AttachmentEntity;
 import uz.urinov.stadion.entity.StadiumEntity;
 import uz.urinov.stadion.entity.UserEntity;
+import uz.urinov.stadion.exceptions.ResourceNotFoundException;
 import uz.urinov.stadion.mapper.StadiumMapper;
 import uz.urinov.stadion.repository.AttachmentRepository;
 import uz.urinov.stadion.repository.StadiumRepository;
@@ -66,10 +67,10 @@ public class StadiumService {
 
     public StadiumDTO getStadiumById(Long id) {
         Optional<StadiumEntity> stadiumEntity = stadiumRepository.findById(id);
-        return stadiumEntity.map(stadiumMapper::mapTo).orElseThrow();
+        return stadiumEntity.map(stadiumMapper::mapTo).orElseThrow(() -> new ResourceNotFoundException("Stadium not Found!!!"));
     }
 
-    public void saveStadium(StadiumDTO requestDTO) {
+    public StadiumEntity saveStadium(StadiumDTO requestDTO) {
         StadiumEntity stadiumEntity = new StadiumEntity();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity principal = (UserEntity) authentication.getPrincipal();
@@ -81,14 +82,18 @@ public class StadiumService {
         stadiumEntity.setLon(requestDTO.getCoordinateDTO().getLon());
         stadiumEntity.setHourlyPrice(requestDTO.getHourlyPrice());
         stadiumEntity.setOwner(principal);
+        try {
+            List<AttachmentEntity> attachmentEntities = attachmentRepository.findAllById(requestDTO.getImageList());
 
-        List<AttachmentEntity> attachmentEntities = attachmentRepository.findAllById(requestDTO.getImageList());
+            stadiumEntity.setAttachmentEntities(
+                    attachmentEntities
+            );
+        } catch (Exception e) {
 
-        stadiumEntity.setAttachmentEntities(
-                attachmentEntities
-        );
+        }
 
-        stadiumRepository.save(stadiumEntity);
+
+     return stadiumRepository.save(stadiumEntity);
     }
 
 
@@ -107,7 +112,7 @@ public class StadiumService {
         stadiumEntity.setLon(requestDTO.getCoordinateDTO().getLon());
         stadiumEntity.setLat(requestDTO.getCoordinateDTO().getLat());
         stadiumEntity.setHourlyPrice(requestDTO.getHourlyPrice());
-        stadiumRepository.updateStadiumEntityByOwnerId(stadiumEntity,id);
+        stadiumRepository.save(stadiumEntity);
         return new ApiResponse("Success", true);
     }
 

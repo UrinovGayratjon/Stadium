@@ -1,5 +1,6 @@
 package uz.urinov.stadion.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/stadiums")
+@SecurityRequirement(name = "bearerAuth")
 public class StadiumController {
     private final StadiumService stadiumService;
 
@@ -38,8 +40,7 @@ public class StadiumController {
 
     @PostMapping()
     public ResponseEntity<?> saveStadium(@RequestBody StadiumDTO requestDTO) {
-        stadiumService.saveStadium(requestDTO);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(stadiumService.saveStadium(requestDTO));
     }
 
     @PutMapping("/{id}")

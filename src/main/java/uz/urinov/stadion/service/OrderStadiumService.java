@@ -8,9 +8,11 @@ import uz.urinov.stadion.config.CurrentUserProvider;
 import uz.urinov.stadion.config.Util;
 import uz.urinov.stadion.dto.ApiResponse;
 import uz.urinov.stadion.dto.request.OrderDTO;
+import uz.urinov.stadion.dto.response.OrderResponseDTO;
 import uz.urinov.stadion.entity.OrderEntity;
 import uz.urinov.stadion.entity.StadiumEntity;
 import uz.urinov.stadion.entity.UserEntity;
+import uz.urinov.stadion.mapper.OrderResponseDTOMapper;
 import uz.urinov.stadion.repository.OrderRepository;
 import uz.urinov.stadion.repository.StadiumRepository;
 
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class OrderStadiumService {
     private final OrderRepository orderRepository;
     private final StadiumRepository stadiumRepository;
+    private final OrderResponseDTOMapper orderResponseDTOMapper;
 
     public ApiResponse createOrder(OrderDTO orderDTO) {
         StadiumEntity byId = stadiumRepository.findById(orderDTO.getStadiumId()).orElseThrow();
@@ -53,9 +56,10 @@ public class OrderStadiumService {
     }
 
 
-    public OrderEntity findById(Long id) {
+    public OrderResponseDTO findById(Long id) {
         UserEntity userEntity = CurrentUserProvider.getCurrentUser();
-        return orderRepository.findByIdAndOrderOwnerId(id, userEntity.getId()).orElseThrow();
+        OrderEntity orderEntity = orderRepository.findByIdAndOrderOwnerId(id, userEntity.getId()).orElseThrow();
+        return  orderResponseDTOMapper.mapFrom(orderEntity);
     }
 
     public void deleteById(Long id) {
@@ -63,8 +67,11 @@ public class OrderStadiumService {
         orderRepository.deleteByIdAndOrderOwnerId(id, userEntity.getId());
     }
 
-    public List<OrderEntity> findByUserId() {
+    public List<OrderResponseDTO> findByUserId() {
         UserEntity userEntity = CurrentUserProvider.getCurrentUser();
-        return orderRepository.findByOrderOwnerId(userEntity.getId());
+        List<OrderEntity> byOrderOwnerId = orderRepository.findByOrderOwnerId(userEntity.getId());
+        List<OrderResponseDTO> list = byOrderOwnerId.stream().map(orderResponseDTOMapper::mapFrom).toList();
+
+        return list;
     }
 }

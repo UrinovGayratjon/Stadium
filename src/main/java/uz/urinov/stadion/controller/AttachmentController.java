@@ -1,5 +1,6 @@
 package uz.urinov.stadion.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/attachment")
 @AllArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class AttachmentController {
     private final AttachmentService attachmentService;
 
