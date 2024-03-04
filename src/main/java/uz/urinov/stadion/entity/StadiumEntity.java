@@ -17,10 +17,10 @@ public class StadiumEntity extends AbstractEntity {
     private Double lon;
     private Long hourlyPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity owner;
 
-    @OneToMany()
+    @OneToMany(fetch = FetchType.LAZY)
     private List<AttachmentEntity> attachmentEntities;
 
     @OneToMany(mappedBy = "stadiumEntity", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
