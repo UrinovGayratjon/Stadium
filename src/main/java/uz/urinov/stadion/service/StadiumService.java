@@ -48,7 +48,7 @@ public class StadiumService {
             LocalTime startLocalTime = startLocalDateTime.toLocalTime();
             LocalTime endLocalTime = endLocalDateTime.toLocalTime();
 
-            List<StadiumEntity> entityList = stadiumRepository.getAllBySortingByFreeTime2(date,startLocalTime,endLocalTime,lat, lon);
+            List<StadiumEntity> entityList = stadiumRepository.getAllBySortingByFreeTime(date,startLocalTime,endLocalTime,lat, lon);
 
             List<StadiumDTO> responseDTOList = entityList.stream().map(stadiumMapper::mapTo).toList();
 

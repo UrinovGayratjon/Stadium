@@ -21,15 +21,9 @@ public interface StadiumRepository extends JpaRepository<StadiumEntity, Long> {
             @Param("lon") Double lon
     );
 
-    @Query("SELECT s FROM StadiumEntity s order by (((s.lat - :lat) * (s.lat - :lat)) + ((s.lon - :lon) * (s.lon - :lon)))")
-    List<StadiumEntity> getAllBySortingByFreeTime(
-            @Param("lat") Double lat,
-            @Param("lon") Double lon
-    );
-
     @Query("SELECT se FROM StadiumEntity se " +
             "WHERE se.id NOT IN (SELECT s.id FROM StadiumEntity s INNER JOIN s.orderEntityList o WHERE (o.date=:date and not (:end<=o.startTime or :start>=o.endTime)))  order by (((se.lat - :lat) * (se.lat - :lat)) + ((se.lon - :lon) * (se.lon - :lon)))")
-    List<StadiumEntity> getAllBySortingByFreeTime2(
+    List<StadiumEntity> getAllBySortingByFreeTime(
             @Param("date") LocalDate date,
             @Param("start") LocalTime start,
             @Param("end") LocalTime end,
